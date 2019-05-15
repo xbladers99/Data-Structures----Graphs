@@ -1,0 +1,32 @@
+/*Graph coloring concept is used to find if the given graph is bipartite or not.*/
+bool DFSUtil(int g[][MAX],int n,int v,int color[],int vis[])
+{
+    vis[v] = 1;
+    for(int i=0;i<n;i++)
+    {
+        if(g[v][i] == 1)
+        {
+            if(!vis[i])
+            {
+                color[i] = !color[v];
+                
+                if(!DFSUtil(g,n,i,color,vis))
+                    return false;
+            }
+            else if(color[i] == color[v])
+                return false;
+        }
+        
+    }
+    return true;
+}
+
+bool isBipartite(int g[][MAX],int v)
+{
+     int color[v] = {0};
+     int vis[v] = {0};
+     for(int i=0;i<v;i++)
+        if(!DFSUtil(g,v,i,color,vis))
+            return false;
+    return true;
+}
