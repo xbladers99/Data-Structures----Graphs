@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool isSafe(int a,int b,int n,int m)
+{
+    if(a>=1 && a<=n && b>=1 && b<=m)
+        return true;
+    return false;
+}
+
+void func(set<int> &s,int a,int b,int n,int m,queue<pair<int,int>> &q)
+{
+    int u[5],v[5];
+    u[1] = a-1;   v[1] = b;
+    u[2] = a+1;   v[2] = b;
+    u[3] = a;     v[3] = b-1;
+    u[4] = a;     v[4] = b+1;
+    
+    int i;
+    for(i = 1;i<=4;i++)
+    {
+        if(isSafe(u[i],v[i],n,m))
+        {
+            auto it = s.find((u[i]-1)*m + v[i]);
+            if(it != s.end())
+            {
+                q.push(make_pair(u[i],v[i]));
+                s.erase(it);
+            }
+        }
+    }
+}
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n,m,i,j;
+        cin>>n>>m;
+        
+        queue<pair<int,int>> q1,q2;
+        set<int> s;
+        for(i=1;i<=n;i++)
+        {
+            for(j=1;j<=m;j++)
+            {
+                int a;
+                cin>>a;
+                
+                if(a == 2)
+                    q1.push(make_pair(i,j));
+                else if(a==1)
+                    s.insert((i-1)*m + j);
+            }
+        }
+        i = 0;
+        while(!q1.empty() || !q2.empty())
+        {
+            if(i%2==0)
+            {
+                while(!q1.empty())
+                {
+                    int u,v;
+                    u = q1.front().first;
+                    v = q1.front().second;
+                    q1.pop();
+                    
+                    func(s,u,v,n,m,q2);
+                }
+            }
+            else
+            {
+                while(!q2.empty())
+                {
+                    int u,v;
+                    u = q2.front().first;
+                    v = q2.front().second;
+                    q2.pop();
+                    
+                    func(s,u,v,n,m,q1);
+                }
+            }
+            i++;
+            
+            if(s.empty())
+                break;
+        }
+        
+        if(q1.empty() && q2.empty() && !s.empty())
+            cout<<-1<<endl;
+        else if(s.empty())
+            cout<<i<<endl;
+    }
+	return 0;
+}
