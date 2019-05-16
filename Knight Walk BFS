@@ -1,0 +1,121 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool isSafe(int a,int b,int n,int m)
+{
+    if(a>0 && a<=n && b>0 && b<=m)
+        return true;
+    return false;
+}
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n,m;
+        cin>>n>>m;
+        int a,b,c,d,source,dest,i,j;
+        cin>>a>>b>>c>>d;
+        source = (a-1)*m + b;
+        dest = (c-1)*m + d;
+        
+        set<int> g[n*m + 1];
+        
+        for(i=1;i<=n;i++)
+        {
+            for(j=1;j<=m;j++)
+            {
+                int u1,u2,u3,u4,u5,u6,u7,u8;
+                int v1,v2,v3,v4,v5,v6,v7,v8;
+                
+                u1 = i-2;   v1 = j-1;
+                u2 = i-2;   v2 = j+1;
+                u3 = i-1;   v3 = j+2;
+                u4 = i-1;   v4 = j-2;
+                u5 = i+1;   v5 = j-2;
+                u6 = i+1;   v6 = j+2;
+                u7 = i+2;   v7 = j-1;
+                u8 = i+2;   v8 = j+1;
+                int a = (i-1)*m + j;
+                
+                if(isSafe(u1,v1,n,m))
+                {
+                    int b = (u1-1)*m + v1;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+                if(isSafe(u2,v2,n,m))
+                {
+                    int b = (u2-1)*m + v2;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+                if(isSafe(u3,v3,n,m))
+                {
+                    int b = (u3-1)*m + v3;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+                if(isSafe(u4,v4,n,m))
+                {
+                    int b = (u4-1)*m + v4;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+                if(isSafe(u5,v5,n,m))
+                {
+                    int b = (u5-1)*m + v5;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+                if(isSafe(u6,v6,n,m))
+                {
+                    int b = (u6-1)*m + v6;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+                if(isSafe(u7,v7,n,m))
+                {
+                    int b = (u7-1)*m + v7;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+                if(isSafe(u8,v8,n,m))
+                {
+                    int b = (u8-1)*m + v8;
+                    g[a].insert(b);
+                    g[b].insert(a);
+                }    
+            }
+        }
+        
+        int dist[n*m + 1], vis[n*m + 1];
+        for(i=0;i<=n*m;i++)
+        {
+            dist[i] = INT_MAX;
+            vis[i] = 0;
+        }
+        queue<int> q;
+        q.push(source);
+        dist[source] = 0;
+        
+        while(!q.empty())
+        {
+            int u = q.front();  q.pop();
+            if(vis[u])
+                continue;
+            vis[u] = 1;
+            for(auto j = g[u].begin();j!=g[u].end();j++)
+            {
+                q.push(*j);
+                if(dist[*j] > dist[u] + 1)
+                    dist[*j] = dist[u] + 1;
+            }
+        }
+        if(dist[dest] == INT_MAX)
+            cout<<-1<<endl;
+        else
+        cout<<dist[dest]<<endl;
+    }
+	return 0;
+}
