@@ -1,0 +1,48 @@
+int quickestWayUp(vector<vector<int>> ladders, vector<vector<int>> snakes) 
+{
+    int size = 101;
+    int dest[size], vis[size];
+    memset(vis, 0, sizeof(vis));
+
+    int i,j;
+    for(i=0;i<size;i++)
+        dest[i] = i;
+
+    for(i=0;i<ladders.size();i++)
+    {
+        dest[ladders[i][0]] = dest[ladders[i][1]];
+    }
+    for(i=0;i<snakes.size();i++)
+    {
+        dest[snakes[i][0]] = dest[snakes[i][1]];
+    }
+    // for(i=0;i<size;i++)
+    //     cout<<"dest["<<i<<"] = "<<dest[i]<<endl;
+    queue<node> q;
+    q.push({1,0});
+    int ans = INT_MAX;
+    while(!q.empty())
+    {
+        node a = q.front(); q.pop();
+        i = a.val;
+        int d = a.dist;
+        if(vis[i])
+            continue;
+
+        vis[i] = 1;
+        for(j=1;j<=6;j++)
+        {
+            cout<<"i = "<<i<<" j = "<<j<<" dest["<<i+j<<"] = "<<dest[i+j]<<" dist = "<<d                                                                              +1<<endl;
+            if(dest[i + j] == size-1)
+            {
+                // ans = min(ans, d+1);
+                // break;
+                return d + 1;
+            }
+                
+                
+            q.push({dest[i+j], d+1});
+        }
+    }
+    return -1;
+}
